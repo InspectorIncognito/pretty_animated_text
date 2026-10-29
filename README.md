@@ -7,7 +7,8 @@
 
 Link: https://pretty-animated-text.vercel.app
 
-
+[![Flutterverse](https://img.shields.io/endpoint?url=https%3A%2F%2Fflutterverse.org%2Fbadge%2Fpretty_animated_text.json)](https://flutterverse.org/p/pretty_animated_text)
+&nbsp;&nbsp;
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-orange.svg)](https://buymeacoffee.com/yloo2)
 &nbsp;&nbsp;
 ![GitHub Repo stars](https://img.shields.io/github/stars/YeLwinOo-Steve/pretty_animated_text)
