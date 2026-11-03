@@ -6,7 +6,7 @@ import 'package:pretty_animated_text/src/animation_config.dart';
 
 const _kUpperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const _kLowerChars = 'abcdefghijklmnopqrstuvwxyz';
-const _kOtherChars = '0123456789!@#%&?';
+const _kOtherChars = '0123456789';
 
 /// Returns the display string for [original] at animation progress [t]
 ///
