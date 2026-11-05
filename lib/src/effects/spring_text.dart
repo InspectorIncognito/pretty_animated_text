@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pretty_animated_text/src/utils/text_widget_builder.dart';
 import 'package:pretty_animated_text/src/widgets/paragraph_text.dart';
 import 'package:pretty_animated_text/src/animated_text_base.dart';
 import 'package:pretty_animated_text/src/animated_text_controller.dart';
@@ -22,6 +23,8 @@ class SpringText extends StatelessWidget {
   /// On controller created
   final void Function(AnimatedTextController)? onControllerCreated;
 
+  final TextWidgetBuilder? textBuilder;
+
   const SpringText({
     super.key,
     required this.text,
@@ -29,6 +32,7 @@ class SpringText extends StatelessWidget {
     this.textAlign = TextAlign.start,
     required this.config,
     this.onControllerCreated,
+    this.textBuilder,
   });
 
   @override
@@ -71,6 +75,16 @@ class SpringText extends StatelessWidget {
               )),
             );
 
+            Widget child;
+            if (textBuilder != null) {
+              child = textBuilder!(segments[index], style);
+            } else {
+              child = ParagraphText(
+                segments[index],
+                style: style,
+              );
+            }
+
             return AnimatedBuilder(
               animation: animations[index],
               builder: (context, child) {
@@ -82,10 +96,7 @@ class SpringText extends StatelessWidget {
                   ),
                 );
               },
-              child: ParagraphText(
-                segments[index],
-                style: style,
-              ),
+              child: child,
             );
           }),
         );

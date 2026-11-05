@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pretty_animated_text/src/utils/text_widget_builder.dart';
 import 'package:pretty_animated_text/src/widgets/paragraph_text.dart';
 import 'package:pretty_animated_text/src/animated_text_base.dart';
 import 'package:pretty_animated_text/src/animated_text_controller.dart';
@@ -48,6 +49,7 @@ class ScrambleText extends StatefulWidget {
   final TextAlign textAlign;
   final AnimationConfig config;
   final void Function(AnimatedTextController)? onControllerCreated;
+  final TextWidgetBuilder? textBuilder;
 
   const ScrambleText({
     super.key,
@@ -56,6 +58,7 @@ class ScrambleText extends StatefulWidget {
     this.textAlign = TextAlign.start,
     required this.config,
     this.onControllerCreated,
+    this.textBuilder,
   });
 
   @override
@@ -75,7 +78,6 @@ class _ScrambleTextState extends State<ScrambleText> {
       // glyphs rebuild.
       rebuildOnTick: false,
       builder: (context, animations, segments) {
-
         return Wrap(
           alignment: widget.textAlign == TextAlign.center
               ? WrapAlignment.center
@@ -110,13 +112,21 @@ class _ScrambleTextState extends State<ScrambleText> {
                   child: AnimatedBuilder(
                     animation: animations[index],
                     builder: (context, _) {
+                      Widget child;
                       final t = animations[index].value;
+                      final scramble =
+                          _scrambleDisplay(segments[index], t, index);
+                      if (widget.textBuilder != null) {
+                        child = widget.textBuilder!(scramble, widget.style);
+                      } else {
+                        child = ParagraphText(
+                          scramble,
+                          style: widget.style,
+                        );
+                      }
                       return Opacity(
                         opacity: opacityAnim.value.clamp(0.0, 1.0),
-                        child: ParagraphText(
-                          _scrambleDisplay(segments[index], t, index),
-                          style: widget.style,
-                        ),
+                        child: child,
                       );
                     },
                   ),

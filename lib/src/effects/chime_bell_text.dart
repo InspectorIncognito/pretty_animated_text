@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pretty_animated_text/pretty_animated_text.dart';
+import 'package:pretty_animated_text/src/utils/text_widget_builder.dart';
 
 /// A widget that animates text with a chime bell effect
 class ChimeBellText extends StatelessWidget {
@@ -20,6 +21,8 @@ class ChimeBellText extends StatelessWidget {
   /// On controller created
   final void Function(AnimatedTextController)? onControllerCreated;
 
+  final TextWidgetBuilder? textBuilder;
+
   const ChimeBellText({
     super.key,
     required this.text,
@@ -27,6 +30,7 @@ class ChimeBellText extends StatelessWidget {
     this.textAlign = TextAlign.start,
     required this.config,
     this.onControllerCreated,
+    this.textBuilder,
   });
 
   @override
@@ -46,6 +50,16 @@ class ChimeBellText extends StatelessWidget {
             animations[index].drive(CurveTween(curve: config.curve)),
           );
 
+          Widget child;
+          if (textBuilder != null) {
+            child = textBuilder!(segments[index], style);
+          } else {
+            child = ParagraphText(
+              segments[index],
+              style: style,
+            );
+          }
+
           return AnimatedBuilder(
             animation: rotateAnimation,
             builder: (context, child) {
@@ -62,10 +76,7 @@ class ChimeBellText extends StatelessWidget {
                 ),
               );
             },
-            child: ParagraphText(
-              segments[index],
-              style: style,
-            ),
+            child: child,
           );
         });
 

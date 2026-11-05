@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_animated_text/pretty_animated_text.dart';
+import 'package:pretty_animated_text_example/widgets/shadow_text.dart';
 import '../core/constants.dart';
 
 AnimationConfig _buildConfig(
@@ -43,6 +44,15 @@ class ChimeBellDemo extends StatelessWidget {
         textAlign: textAlign,
         config: _buildConfig(runtimeType, type, duration, onControllerCreated),
         onControllerCreated: onControllerCreated,
+        textBuilder: (text, style) {
+          return ShadowText(
+            text: Text(text, style: style?.copyWith(fontSize: 48)),
+            outlineColor: Colors.white,
+            outlineWidth: 2,
+            solidShadowColor: Colors.red,
+            solidShadowOffset: const Offset(2, 2),
+          );
+        },
       );
 }
 
