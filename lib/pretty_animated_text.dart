@@ -13,6 +13,7 @@ export 'src/effects/gravity_text.dart';
 export 'src/effects/glitch_text.dart';
 export 'src/effects/squash_bounce_text.dart';
 export 'src/widgets/paragraph_text.dart';
+export 'src/utils/text_widget_builder.dart';
 
 /// Animation type enum for [letter, word] & modes [ forward, reverse, repeat ]
 export 'src/enums/animation_type.dart' show AnimationType, AnimationMode;
