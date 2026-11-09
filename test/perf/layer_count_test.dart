@@ -12,17 +12,18 @@ import 'package:pretty_animated_text/pretty_animated_text.dart';
 
 const _s = TextStyle(fontSize: 16);
 final _effects = <String, Widget Function(String, AnimationConfig)>{
-  'BlurText': (t, c) => BlurText(text: t, style: _s, config: c),
-  'ScaleText': (t, c) => ScaleText(text: t, style: _s, config: c),
-  'OffsetText': (t, c) => OffsetText(text: t, style: _s, config: c),
-  'SpringText': (t, c) => SpringText(text: t, style: _s, config: c),
-  'RotateText': (t, c) => RotateText(text: t, style: _s, config: c),
-  'ChimeBellText': (t, c) => ChimeBellText(text: t, style: _s, config: c),
-  'SlideText': (t, c) => SlideText(text: t, style: _s, config: c),
-  'ScrambleText': (t, c) => ScrambleText(text: t, style: _s, config: c),
-  'RevealText': (t, c) => RevealText(text: t, style: _s, config: c),
-  'GlitchText': (t, c) => GlitchText(text: t, style: _s, config: c),
-  'SquashBounceText': (t, c) => SquashBounceText(text: t, style: _s, config: c),
+  'BlurText': (t, c) => BlurText(text: Text(t, style: _s), config: c),
+  'ScaleText': (t, c) => ScaleText(text: Text(t, style: _s), config: c),
+  'OffsetText': (t, c) => OffsetText(text: Text(t, style: _s), config: c),
+  'SpringText': (t, c) => SpringText(text: Text(t, style: _s), config: c),
+  'RotateText': (t, c) => RotateText(text: Text(t, style: _s), config: c),
+  'ChimeBellText': (t, c) => ChimeBellText(text: Text(t, style: _s), config: c),
+  'SlideText': (t, c) => SlideText(text: Text(t, style: _s), config: c),
+  'ScrambleText': (t, c) => ScrambleText(text: Text(t, style: _s), config: c),
+  'RevealText': (t, c) => RevealText(text: Text(t, style: _s), config: c),
+  'GlitchText': (t, c) => GlitchText(text: Text(t, style: _s), config: c),
+  'SquashBounceText': (t, c) =>
+      SquashBounceText(text: Text(t, style: _s), config: c),
 };
 
 void main() {
@@ -31,11 +32,15 @@ void main() {
       tester.view.physicalSize = const Size(1200, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
-      final text = List.filled(5, 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ').join().substring(0, 500);
+      final text = List.filled(5,
+              'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ')
+          .join()
+          .substring(0, 500);
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: SingleChildScrollView(
-            child: e.value(text, const AnimationConfig(duration: Duration(milliseconds: 40))),
+            child: e.value(text,
+                const AnimationConfig(duration: Duration(milliseconds: 40))),
           ),
         ),
       ));
@@ -56,9 +61,15 @@ void main() {
           }
         }
       }
+
       visit(tester.binding.renderViews.first.debugLayer!);
       // ignore: avoid_print
-      print('LAYERS ${jsonEncode({'effect': e.key, 'glyphs': 500, 'layers': layers, 'kinds': kinds})}');
+      print('LAYERS ${jsonEncode({
+            'effect': e.key,
+            'glyphs': 500,
+            'layers': layers,
+            'kinds': kinds
+          })}');
       await tester.pumpWidget(const SizedBox());
     });
   }

@@ -5,10 +5,7 @@ import 'package:pretty_animated_text/src/utils/offset_tween_by_slide_type.dart';
 /// A widget that animates text with a sliding effect
 class SlideText extends StatelessWidget {
   /// The text to animate
-  final String text;
-
-  /// The style to apply to the text
-  final TextStyle? style;
+  final Text text;
 
   /// The text alignment
   final TextAlign textAlign;
@@ -25,7 +22,6 @@ class SlideText extends StatelessWidget {
   const SlideText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.slideType = SlideAnimationType.topBottom,
@@ -36,14 +32,13 @@ class SlideText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedTextBase(
       text: text,
-      style: style,
       textAlign: textAlign,
       config: config,
       onControllerCreated: onControllerCreated,
       // Each segment listens to its own animation, so only moving
       // glyphs rebuild.
       rebuildOnTick: false,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         return Wrap(
           alignment: textAlign == TextAlign.center
               ? WrapAlignment.center
@@ -71,7 +66,7 @@ class SlideText extends StatelessWidget {
               },
               child: ParagraphText(
                 segments[index],
-                style: style,
+                style: styles[index],
               ),
             );
           }),
@@ -79,4 +74,4 @@ class SlideText extends StatelessWidget {
       },
     );
   }
-} 
+}

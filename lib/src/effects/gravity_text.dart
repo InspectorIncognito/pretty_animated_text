@@ -30,7 +30,7 @@ class GravityText extends StatefulWidget {
   final void Function(AnimatedTextController)? onControllerCreated;
 
   final double gravity;
-  
+
   /// pixels per simulated metre - range (~0.1–10 m).
   final double pixelsPerMeter;
   final double density;
@@ -118,7 +118,7 @@ class _GravityTextState extends State<GravityText>
     _ticker = createTicker(_onTick);
 
     // GravityText is a real rigid-body simulation, so the tween-oriented
-    // playback flags don't apply. 
+    // playback flags don't apply.
     // Warn (debug only, non-fatal) that they're ignored.
     assert(() {
       if (widget.config.reverse) {
@@ -210,7 +210,6 @@ class _GravityTextState extends State<GravityText>
     g.body.setAwake(true);
   }
 
-  
   void _followDragTarget() {
     final drag = _dragBody;
     final target = _dragTarget;
@@ -234,7 +233,6 @@ class _GravityTextState extends State<GravityText>
       g.body.angularVelocity = 0.0;
     }
   }
-
 
   void _buildWorld(Size size, BuildContext context) {
     final glyphs = _measureGlyphs(size, context);
@@ -262,7 +260,7 @@ class _GravityTextState extends State<GravityText>
     body.createFixtureFromShape(shape, friction: widget.friction);
   }
 
-  /// Creates a frozen body for [g] at its reading position. 
+  /// Creates a frozen body for [g] at its reading position.
   /// (colliding with nothing) until released by [_dropGlyph].
   void _createGlyphBody(
     World world,
@@ -438,7 +436,6 @@ class _GravityTextState extends State<GravityText>
     _dragBody = null;
     _dragTarget = null;
   }
-
 
   @override
   void didUpdateWidget(GravityText oldWidget) {

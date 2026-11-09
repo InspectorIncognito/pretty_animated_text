@@ -11,8 +11,7 @@ import 'package:pretty_animated_text/src/animation_config.dart';
 /// full opacity as the cursor passes it. Works identically for letter
 /// and word animation types.
 class RevealText extends StatelessWidget {
-  final String text;
-  final TextStyle? style;
+  final Text text;
   final TextAlign textAlign;
   final AnimationConfig config;
   final void Function(AnimatedTextController)? onControllerCreated;
@@ -26,7 +25,6 @@ class RevealText extends StatelessWidget {
   const RevealText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.onControllerCreated,
@@ -40,13 +38,12 @@ class RevealText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedTextBase(
       text: text,
-      style: style,
       textAlign: textAlign,
       config: config,
       onControllerCreated: onControllerCreated,
       // The AnimatedBuilder below listens to the segment animations itself.
       rebuildOnTick: false,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         return AnimatedBuilder(
           // Rebuild whenever any segment animation ticks so the cursor
           // position stays in sync with the reveal front.
@@ -60,15 +57,6 @@ class RevealText extends StatelessWidget {
               if (t > 0.0 && t < 1.0) frontier = i;
             }
 
-            final effectiveCursorColor = cursorColor ??
-                style?.color ??
-                DefaultTextStyle.of(context).style.color ??
-                Colors.black87;
-
-            // Cursor height tracks the line height of the text style.
-            final cursorH =
-                (style?.fontSize ?? 16) * (style?.height ?? 1.2);
-
             return Wrap(
               alignment: textAlign == TextAlign.center
                   ? WrapAlignment.center
@@ -76,9 +64,18 @@ class RevealText extends StatelessWidget {
                       ? WrapAlignment.end
                       : WrapAlignment.start,
               children: List.generate(segments.length, (index) {
+                final effectiveCursorColor = cursorColor ??
+                    styles[index]?.color ??
+                    DefaultTextStyle.of(context).style.color ??
+                    Colors.black87;
+
+                // Cursor height tracks the line height of the text style.
+                final cursorH = (styles[index]?.fontSize ?? 16) *
+                    (styles[index]?.height ?? 1.2);
+
                 final t = animations[index].value.clamp(0.0, 1.0);
-                final opacity =
-                    (dimOpacity + (1.0 - dimOpacity) * t).clamp(dimOpacity, 1.0);
+                final opacity = (dimOpacity + (1.0 - dimOpacity) * t)
+                    .clamp(dimOpacity, 1.0);
 
                 return Stack(
                   // Clip.none so the cursor (a Positioned child) can paint
@@ -88,7 +85,8 @@ class RevealText extends StatelessWidget {
                     // Text at reveal opacity (dimOpacity -> 1.0)
                     Opacity(
                       opacity: opacity,
-                      child: ParagraphText(segments[index], style: style),
+                      child:
+                          ParagraphText(segments[index], style: styles[index]),
                     ),
                     // Cursor: pinned to the leading edge of the frontier
                     // segment only. Uses Positioned so it never affects

@@ -33,18 +33,20 @@ typedef _Builder = Widget Function(String text, AnimationConfig config);
 
 final Map<String, _Builder> _effects = {
   'Baseline (single Text + Fade)': (t, c) => _BaselineFade(text: t),
-  'BlurText': (t, c) => BlurText(text: t, style: _style, config: c),
-  'ScaleText': (t, c) => ScaleText(text: t, style: _style, config: c),
-  'OffsetText': (t, c) => OffsetText(text: t, style: _style, config: c),
-  'SpringText': (t, c) => SpringText(text: t, style: _style, config: c),
-  'RotateText': (t, c) => RotateText(text: t, style: _style, config: c),
-  'ChimeBellText': (t, c) => ChimeBellText(text: t, style: _style, config: c),
-  'SlideText': (t, c) => SlideText(text: t, style: _style, config: c),
-  'ScrambleText': (t, c) => ScrambleText(text: t, style: _style, config: c),
-  'RevealText': (t, c) => RevealText(text: t, style: _style, config: c),
-  'GlitchText': (t, c) => GlitchText(text: t, style: _style, config: c),
+  'BlurText': (t, c) => BlurText(text: Text(t, style: _style), config: c),
+  'ScaleText': (t, c) => ScaleText(text: Text(t, style: _style), config: c),
+  'OffsetText': (t, c) => OffsetText(text: Text(t, style: _style), config: c),
+  'SpringText': (t, c) => SpringText(text: Text(t, style: _style), config: c),
+  'RotateText': (t, c) => RotateText(text: Text(t, style: _style), config: c),
+  'ChimeBellText': (t, c) =>
+      ChimeBellText(text: Text(t, style: _style), config: c),
+  'SlideText': (t, c) => SlideText(text: Text(t, style: _style), config: c),
+  'ScrambleText': (t, c) =>
+      ScrambleText(text: Text(t, style: _style), config: c),
+  'RevealText': (t, c) => RevealText(text: Text(t, style: _style), config: c),
+  'GlitchText': (t, c) => GlitchText(text: Text(t, style: _style), config: c),
   'SquashBounceText': (t, c) =>
-      SquashBounceText(text: t, style: _style, config: c),
+      SquashBounceText(text: Text(t, style: _style), config: c),
   'GravityText': (t, c) => SizedBox(
         width: 1200,
         height: 800,
@@ -117,9 +119,11 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: SingleChildScrollView(
-            child: entry.value(_textOf(glyphs), config.copyWith(
-              onComplete: (_) => completedAtFrame = -2,
-            )),
+            child: entry.value(
+                _textOf(glyphs),
+                config.copyWith(
+                  onComplete: (_) => completedAtFrame = -2,
+                )),
           ),
         ),
       ));

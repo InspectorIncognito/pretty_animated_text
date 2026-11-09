@@ -28,8 +28,7 @@ class _HostState extends State<_Host> {
         body: Column(
           children: [
             SquashBounceText(
-              text: 'Hello World',
-              style: const TextStyle(fontSize: 20),
+              text: const Text('Hello World', style: TextStyle(fontSize: 20)),
               config: config,
               onControllerCreated: (c) {
                 if (_notifier.value != c) {

@@ -6,14 +6,16 @@ import 'package:pretty_animated_text/pretty_animated_text.dart';
 const _style = TextStyle(fontSize: 16);
 
 final Map<String, Widget Function(String, AnimationConfig)> _tweenEffects = {
-  'BlurText': (t, c) => BlurText(text: t, style: _style, config: c),
-  'ScaleText': (t, c) => ScaleText(text: t, style: _style, config: c),
-  'OffsetText': (t, c) => OffsetText(text: t, style: _style, config: c),
-  'SpringText': (t, c) => SpringText(text: t, style: _style, config: c),
-  'RotateText': (t, c) => RotateText(text: t, style: _style, config: c),
-  'ChimeBellText': (t, c) => ChimeBellText(text: t, style: _style, config: c),
-  'SlideText': (t, c) => SlideText(text: t, style: _style, config: c),
-  'ScrambleText': (t, c) => ScrambleText(text: t, style: _style, config: c),
+  'BlurText': (t, c) => BlurText(text: Text(t, style: _style), config: c),
+  'ScaleText': (t, c) => ScaleText(text: Text(t, style: _style), config: c),
+  'OffsetText': (t, c) => OffsetText(text: Text(t, style: _style), config: c),
+  'SpringText': (t, c) => SpringText(text: Text(t, style: _style), config: c),
+  'RotateText': (t, c) => RotateText(text: Text(t, style: _style), config: c),
+  'ChimeBellText': (t, c) =>
+      ChimeBellText(text: Text(t, style: _style), config: c),
+  'SlideText': (t, c) => SlideText(text: Text(t, style: _style), config: c),
+  'ScrambleText': (t, c) =>
+      ScrambleText(text: Text(t, style: _style), config: c),
 };
 
 Widget _host(Widget child) => MaterialApp(home: Scaffold(body: child));
@@ -63,11 +65,11 @@ void main() {
       const config = AnimationConfig(duration: Duration(milliseconds: 100));
       final live = await _liveCurvesDuring(() async {
         await tester.pumpWidget(_host(
-          const ScaleText(text: 'abc', style: _style, config: config),
+          const ScaleText(text: Text('abc', style: _style), config: config),
         ));
         await tester.pump(const Duration(milliseconds: 16));
         await tester.pumpWidget(_host(
-          const ScaleText(text: 'abcdef', style: _style, config: config),
+          const ScaleText(text: Text('abcdef', style: _style), config: config),
         ));
         await tester.pump(const Duration(milliseconds: 16));
         await tester.pumpWidget(const SizedBox());
@@ -80,12 +82,12 @@ void main() {
     testWidgets('re-splits segments when text changes', (tester) async {
       const config = AnimationConfig(duration: Duration(milliseconds: 100));
       await tester.pumpWidget(_host(
-        const ScaleText(text: 'ab', style: _style, config: config),
+        const ScaleText(text: Text('ab', style: _style), config: config),
       ));
       expect(find.byType(ParagraphText), findsNWidgets(2));
 
       await tester.pumpWidget(_host(
-        const ScaleText(text: 'abcde', style: _style, config: config),
+        const ScaleText(text: Text('abcde', style: _style), config: config),
       ));
       expect(find.byType(ParagraphText), findsNWidgets(5));
       final texts = tester
@@ -100,15 +102,13 @@ void main() {
     testWidgets('re-splits segments when the animation type changes',
         (tester) async {
       await tester.pumpWidget(_host(const ScaleText(
-        text: 'hello big world',
-        style: _style,
+        text: Text('hello big world', style: _style),
         config: AnimationConfig(duration: Duration(milliseconds: 100)),
       )));
       expect(find.byType(ParagraphText), findsNWidgets(15));
 
       await tester.pumpWidget(_host(const ScaleText(
-        text: 'hello big world',
-        style: _style,
+        text: Text('hello big world', style: _style),
         config: AnimationConfig(
           duration: Duration(milliseconds: 100),
           type: AnimationType.word,
@@ -123,8 +123,7 @@ void main() {
         (tester) async {
       AnimatedTextController? controller;
       Widget scale(String text, int ms) => _host(ScaleText(
-            text: text,
-            style: _style,
+            text: Text(text, style: _style),
             config: AnimationConfig(duration: Duration(milliseconds: ms)),
             onControllerCreated: (c) => controller = c,
           ));
@@ -150,8 +149,7 @@ void main() {
       AnimatedTextController? controller;
       // AnimationConfig equality ignores callbacks, so these two are "equal".
       Widget scale(String tag) => _host(ScaleText(
-            text: 'abc',
-            style: _style,
+            text: const Text('abc', style: _style),
             config: AnimationConfig(
               duration: const Duration(milliseconds: 100),
               onComplete: (_) => calls.add(tag),
@@ -176,13 +174,13 @@ void main() {
     const text = 'abcdefghijklmnopqrst';
     const config = AnimationConfig(duration: Duration(milliseconds: 100));
 
-    Widget counting(List<int> segmentBuilds, {bool rebuildOnTick = false,
-        void Function()? onBuilder}) {
+    Widget counting(List<int> segmentBuilds,
+        {bool rebuildOnTick = false, void Function()? onBuilder}) {
       return _host(AnimatedTextBase(
-        text: text,
+        text: const Text(text),
         config: config,
         rebuildOnTick: rebuildOnTick,
-        builder: (context, animations, segments) {
+        builder: (context, animations, segments, styles) {
           onBuilder?.call();
           return Wrap(children: [
             for (var i = 0; i < segments.length; i++)
@@ -218,9 +216,9 @@ void main() {
       var builderCalls = 0;
       double? lastValue;
       await tester.pumpWidget(_host(AnimatedTextBase(
-        text: text,
+        text: const Text(text),
         config: config,
-        builder: (context, animations, segments) {
+        builder: (context, animations, segments, styles) {
           builderCalls++;
           lastValue = animations[0].value;
           return Text(segments.join());
@@ -275,29 +273,29 @@ void main() {
 
     testWidgets('every glyph reaches its final state', (tester) async {
       await tester.pumpWidget(_host(const ScaleText(
-        text: 'hello world',
-        style: _style,
+        text: Text('hello world', style: _style),
         config: AnimationConfig(duration: Duration(milliseconds: 100)),
       )));
       await tester.pumpAndSettle();
-      final opacities =
-          tester.widgetList<Opacity>(find.byType(Opacity)).map((o) => o.opacity);
+      final opacities = tester
+          .widgetList<Opacity>(find.byType(Opacity))
+          .map((o) => o.opacity);
       expect(opacities, everyElement(1.0));
     });
 
     testWidgets('reverse returns every glyph to its start state',
         (tester) async {
       await tester.pumpWidget(_host(const ScaleText(
-        text: 'hello world',
-        style: _style,
+        text: Text('hello world', style: _style),
         config: AnimationConfig(
           duration: Duration(milliseconds: 100),
           reverse: true,
         ),
       )));
       await tester.pumpAndSettle();
-      final opacities =
-          tester.widgetList<Opacity>(find.byType(Opacity)).map((o) => o.opacity);
+      final opacities = tester
+          .widgetList<Opacity>(find.byType(Opacity))
+          .map((o) => o.opacity);
       expect(opacities, everyElement(0.0));
     });
   });

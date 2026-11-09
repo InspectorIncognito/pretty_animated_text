@@ -69,17 +69,41 @@ class _DsButtonState extends State<DsButton> {
     final h = _hovered;
     switch (widget.variant) {
       case DsButtonVariant.primary:
-        return (bg: h ? dsInkHover : dsInk, border: h ? dsInkHover : dsInk, fg: dsSurface);
+        return (
+          bg: h ? dsInkHover : dsInk,
+          border: h ? dsInkHover : dsInk,
+          fg: dsSurface
+        );
       case DsButtonVariant.accent:
-        return (bg: h ? dsAccentHover : dsAccent, border: h ? dsAccentHover : dsAccent, fg: dsSurface);
+        return (
+          bg: h ? dsAccentHover : dsAccent,
+          border: h ? dsAccentHover : dsAccent,
+          fg: dsSurface
+        );
       case DsButtonVariant.secondary:
-        return (bg: h ? dsSubtle : dsSurface, border: h ? dsBorderHover : dsBorderStrong, fg: dsInk);
+        return (
+          bg: h ? dsSubtle : dsSurface,
+          border: h ? dsBorderHover : dsBorderStrong,
+          fg: dsInk
+        );
       case DsButtonVariant.filled:
-        return (bg: h ? dsFillHover : dsFill, border: Colors.transparent, fg: dsInk);
+        return (
+          bg: h ? dsFillHover : dsFill,
+          border: Colors.transparent,
+          fg: dsInk
+        );
       case DsButtonVariant.ghost:
-        return (bg: h ? dsFill : Colors.transparent, border: Colors.transparent, fg: h ? dsInk : dsText2);
+        return (
+          bg: h ? dsFill : Colors.transparent,
+          border: Colors.transparent,
+          fg: h ? dsInk : dsText2
+        );
       case DsButtonVariant.danger:
-        return (bg: h ? dsDangerBg : dsSurface, border: h ? dsDangerBorderHover : dsDangerBorder, fg: dsDanger);
+        return (
+          bg: h ? dsDangerBg : dsSurface,
+          border: h ? dsDangerBorderHover : dsDangerBorder,
+          fg: dsDanger
+        );
     }
   }
 
@@ -104,7 +128,8 @@ class _DsButtonState extends State<DsButton> {
     );
 
     return MouseRegion(
-      cursor: _disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+      cursor:
+          _disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: Focus(
@@ -129,7 +154,10 @@ class _DsButtonState extends State<DsButton> {
               border: Border.all(color: c.border),
               borderRadius: BorderRadius.circular(m.radius),
               boxShadow: _focused
-                  ? [const BoxShadow(color: dsFocus, blurRadius: 0, spreadRadius: 3)]
+                  ? [
+                      const BoxShadow(
+                          color: dsFocus, blurRadius: 0, spreadRadius: 3)
+                    ]
                   : null,
             ),
             child: content,
@@ -175,11 +203,23 @@ class _DsIconButtonState extends State<DsIconButton> {
     final h = _hovered;
     switch (widget.variant) {
       case DsIconVariant.outline:
-        return (bg: h ? dsSubtle : dsSurface, border: dsBorderStrong, fg: h ? dsInk : dsText2);
+        return (
+          bg: h ? dsSubtle : dsSurface,
+          border: dsBorderStrong,
+          fg: h ? dsInk : dsText2
+        );
       case DsIconVariant.ink:
-        return (bg: h ? dsInkHover : dsInk, border: h ? dsInkHover : dsInk, fg: dsSurface);
+        return (
+          bg: h ? dsInkHover : dsInk,
+          border: h ? dsInkHover : dsInk,
+          fg: dsSurface
+        );
       case DsIconVariant.ghost:
-        return (bg: h ? dsFill : Colors.transparent, border: Colors.transparent, fg: h ? dsInk : dsMuted);
+        return (
+          bg: h ? dsFill : Colors.transparent,
+          border: Colors.transparent,
+          fg: h ? dsInk : dsMuted
+        );
     }
   }
 

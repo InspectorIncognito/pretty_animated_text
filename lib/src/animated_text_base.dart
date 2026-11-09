@@ -14,10 +14,7 @@ import 'package:pretty_animated_text/src/utils/total_duration.dart';
 /// for all animation state and control logic.
 class AnimatedTextBase extends StatefulWidget {
   /// The text to animate
-  final String text;
-
-  /// The style to apply to the text
-  final TextStyle? style;
+  final Text text;
 
   /// The text alignment
   final TextAlign textAlign;
@@ -26,8 +23,11 @@ class AnimatedTextBase extends StatefulWidget {
   final AnimationConfig config;
 
   /// The builder function that creates the animated text
-  final Widget Function(BuildContext context,
-      List<Animation<double>> animations, List<String> segments) builder;
+  final Widget Function(
+      BuildContext context,
+      List<Animation<double>> animations,
+      List<String> segments,
+      List<TextStyle?> styles) builder;
 
   /// Optional external controller to control the animation.
   /// If not provided, an internal controller is created.
@@ -52,7 +52,6 @@ class AnimatedTextBase extends StatefulWidget {
   const AnimatedTextBase({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     required this.builder,
@@ -73,12 +72,56 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
   late List<String> _segments;
   late AnimatedTextController _textController;
   bool _ownsController = false;
+  late List<TextStyle?> _styles;
+
+  List<TextStyle?> _getStylesPerIndex(
+      InlineSpan rootSpan, TextStyle? rootStyle) {
+    final List<TextStyle?> styles = [];
+
+    // Helper function to recursively traverse spans
+    void traverse(InlineSpan span, TextStyle? inheritedStyle) {
+      // Merge the parent style with the current span's style
+      TextStyle? currentStyle = inheritedStyle;
+      if (span is TextSpan) {
+        currentStyle = inheritedStyle?.merge(span.style) ?? span.style;
+      }
+
+      if (span is TextSpan && span.text != null) {
+        // Add the resolved style for every character in this span
+        for (int i = 0; i < _splitSegments(span.text!).length; i++) {
+          styles.add(currentStyle);
+        }
+      }
+
+      // Recursively process children
+      if (span is TextSpan && span.children != null) {
+        for (final child in span.children!) {
+          traverse(child, currentStyle);
+        }
+      }
+    }
+
+    // Start traversing from the root
+    traverse(rootSpan, rootStyle);
+    return styles;
+  }
+
+  String _getString() {
+    if (widget.text.data != null) return widget.text.data!;
+    return widget.text.textSpan!.toPlainText();
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _segments = _splitSegments();
+    _segments = _splitSegments(_getString());
+    if (widget.text.data != null) {
+      _styles =
+          List.generate(widget.text.data!.length, (index) => widget.text.style);
+    } else {
+      _styles = _getStylesPerIndex(widget.text.textSpan!, widget.text.style);
+    }
 
     // Create the Flutter AnimationController
     final totalDuration = _totalDuration();
@@ -111,9 +154,10 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
   }
 
   /// Split text into segments based on animation type
-  List<String> _splitSegments() => widget.config.type == AnimationType.letter
-      ? widget.text.splittedLetters.map((dto) => dto.text).toList()
-      : widget.text.splittedWords.map((dto) => dto.text).toList();
+  List<String> _splitSegments(String text) =>
+      widget.config.type == AnimationType.letter
+          ? text.splittedLetters.map((dto) => dto.text).toList()
+          : text.splittedWords.map((dto) => dto.text).toList();
 
   /// Full timeline length: every segment's interval, overlapped.
   Duration _totalDuration() => Duration(
@@ -185,7 +229,7 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
 
     if (oldWidget.config != widget.config || oldWidget.text != widget.text) {
       // Re-split: the text or the letter/word type may have changed.
-      _segments = _splitSegments();
+      _segments = _splitSegments(_getString());
 
       // The controller spans the whole overlapped timeline, not one segment.
       final totalDuration = _totalDuration();
@@ -225,12 +269,12 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
   @override
   Widget build(BuildContext context) {
     if (!widget.rebuildOnTick) {
-      return widget.builder(context, _animations, _segments);
+      return widget.builder(context, _animations, _segments, _styles);
     }
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        return widget.builder(context, _animations, _segments);
+        return widget.builder(context, _animations, _segments, _styles);
       },
     );
   }

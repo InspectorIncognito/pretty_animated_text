@@ -16,16 +16,10 @@ class VariationOption<T> {
 
 class AnimationDemoItem {
   final String title;
-  final Widget Function(
-      void Function(AnimatedTextController) onCreated,
-      int variationIndex,
-      TextAlign textAlign,
-      Duration duration) buildLetter;
-  final Widget Function(
-      void Function(AnimatedTextController) onCreated,
-      int variationIndex,
-      TextAlign textAlign,
-      Duration duration) buildWord;
+  final Widget Function(void Function(AnimatedTextController) onCreated,
+      int variationIndex, TextAlign textAlign, Duration duration) buildLetter;
+  final Widget Function(void Function(AnimatedTextController) onCreated,
+      int variationIndex, TextAlign textAlign, Duration duration) buildWord;
 
   /// The list of variation options for this animation.
   /// Empty means no variations are available.

@@ -278,8 +278,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   const Icon(Icons.check_circle_rounded,
                       color: dsAccent, size: 16),
                   const SizedBox(width: 8),
-                  Text('${_currentDemo.title} usage copied',
-                      style: dsLabel()),
+                  Text('${_currentDemo.title} usage copied', style: dsLabel()),
                 ],
               ),
             ),
@@ -698,7 +697,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                 const SizedBox(width: 8),
                 DsButton(
                   label: playing ? 'Pause' : 'Play',
-                  icon: playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                  icon:
+                      playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
                   variant: DsButtonVariant.primary,
                   size: DsButtonSize.sm,
                   onPressed: _handlePlayPause,

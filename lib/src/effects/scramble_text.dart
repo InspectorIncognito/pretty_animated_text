@@ -44,8 +44,7 @@ String _scrambleDisplay(String original, double t, int segIdx) {
 /// A widget that animates text with a scramble effect - characters cycle
 /// through random glyphs then resolve left-to-right into the final text
 class ScrambleText extends StatefulWidget {
-  final String text;
-  final TextStyle? style;
+  final Text text;
   final TextAlign textAlign;
   final AnimationConfig config;
   final void Function(AnimatedTextController)? onControllerCreated;
@@ -54,7 +53,6 @@ class ScrambleText extends StatefulWidget {
   const ScrambleText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.onControllerCreated,
@@ -70,14 +68,13 @@ class _ScrambleTextState extends State<ScrambleText> {
   Widget build(BuildContext context) {
     return AnimatedTextBase(
       text: widget.text,
-      style: widget.style,
       textAlign: widget.textAlign,
       config: widget.config,
       onControllerCreated: widget.onControllerCreated,
       // Each segment listens to its own animation, so only moving
       // glyphs rebuild.
       rebuildOnTick: false,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         return Wrap(
           alignment: widget.textAlign == TextAlign.center
               ? WrapAlignment.center
@@ -101,7 +98,7 @@ class _ScrambleTextState extends State<ScrambleText> {
                 // so the Wrap layout is stable every frame
                 Opacity(
                   opacity: 0.0,
-                  child: ParagraphText(segments[index], style: widget.style),
+                  child: ParagraphText(segments[index], style: styles[index]),
                 ),
                 // Scramble content: Positioned -> excluded from Stack sizing,
                 // free to render at its natural width without shaking the
@@ -117,11 +114,11 @@ class _ScrambleTextState extends State<ScrambleText> {
                       final scramble =
                           _scrambleDisplay(segments[index], t, index);
                       if (widget.textBuilder != null) {
-                        child = widget.textBuilder!(scramble, widget.style);
+                        child = widget.textBuilder!(scramble, styles[index]);
                       } else {
                         child = ParagraphText(
                           scramble,
-                          style: widget.style,
+                          style: styles[index],
                         );
                       }
                       return Opacity(

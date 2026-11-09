@@ -6,10 +6,7 @@ import 'package:pretty_animated_text/src/utils/double_tween_by_rotate_type.dart'
 /// A widget that animates text with a rotation effect
 class RotateText extends StatelessWidget {
   /// The text to animate
-  final String text;
-
-  /// The style to apply to the text
-  final TextStyle? style;
+  final Text text;
 
   /// The text alignment
   final TextAlign textAlign;
@@ -26,7 +23,6 @@ class RotateText extends StatelessWidget {
   const RotateText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.direction = RotateAnimationType.clockwise,
@@ -37,14 +33,13 @@ class RotateText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedTextBase(
       text: text,
-      style: style,
       textAlign: textAlign,
       config: config,
       onControllerCreated: onControllerCreated,
       // Each segment listens to its own animation, so only moving
       // glyphs rebuild.
       rebuildOnTick: false,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         return Wrap(
           alignment: textAlign == TextAlign.center
               ? WrapAlignment.center
@@ -71,7 +66,7 @@ class RotateText extends StatelessWidget {
               },
               child: ParagraphText(
                 segments[index],
-                style: style,
+                style: styles[index],
               ),
             );
           }),

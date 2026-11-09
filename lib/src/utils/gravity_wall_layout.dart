@@ -19,11 +19,19 @@ List<GravityWall> gravityWallLayout(
 
   return [
     // floor
-    (center: Vector2(w / 2, h + t / 2), halfWidth: w / 2 + t, halfHeight: t / 2),
+    (
+      center: Vector2(w / 2, h + t / 2),
+      halfWidth: w / 2 + t,
+      halfHeight: t / 2
+    ),
     // left wall
     (center: Vector2(-t / 2, h / 2), halfWidth: t / 2, halfHeight: h / 2 + t),
     // right wall
-    (center: Vector2(w + t / 2, h / 2), halfWidth: t / 2, halfHeight: h / 2 + t),
+    (
+      center: Vector2(w + t / 2, h / 2),
+      halfWidth: t / 2,
+      halfHeight: h / 2 + t
+    ),
     // ceiling
     (center: Vector2(w / 2, -t / 2), halfWidth: w / 2 + t, halfHeight: t / 2),
   ];

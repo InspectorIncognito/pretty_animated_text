@@ -25,7 +25,8 @@ void main() {
             child: GravityText(
               text: text,
               style: const TextStyle(fontSize: 16),
-              config: const AnimationConfig(duration: Duration(milliseconds: 1)),
+              config:
+                  const AnimationConfig(duration: Duration(milliseconds: 1)),
             ),
           ),
         ),
@@ -41,7 +42,11 @@ void main() {
       }
       frames.sort();
       // ignore: avoid_print
-      print('GRAVITY ${jsonEncode({'glyphs': n, 'frameMedianMs': frames[10], 'frameP90Ms': frames[18]})}');
+      print('GRAVITY ${jsonEncode({
+            'glyphs': n,
+            'frameMedianMs': frames[10],
+            'frameP90Ms': frames[18]
+          })}');
       await tester.pumpWidget(const SizedBox());
     });
   }

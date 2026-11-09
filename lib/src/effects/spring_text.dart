@@ -9,10 +9,7 @@ import 'package:pretty_animated_text/src/utils/spring_curve.dart';
 /// A widget that animates text with a spring effect
 class SpringText extends StatelessWidget {
   /// The text to animate
-  final String text;
-
-  /// The style to apply to the text
-  final TextStyle? style;
+  final Text text;
 
   /// The text alignment
   final TextAlign textAlign;
@@ -28,7 +25,6 @@ class SpringText extends StatelessWidget {
   const SpringText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.onControllerCreated,
@@ -39,14 +35,13 @@ class SpringText extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedTextBase(
       text: text,
-      style: style,
       textAlign: textAlign,
       config: config,
       onControllerCreated: onControllerCreated,
       // Each segment listens to its own animation, so only moving
       // glyphs rebuild.
       rebuildOnTick: false,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         return Wrap(
           alignment: textAlign == TextAlign.center
               ? WrapAlignment.center
@@ -77,11 +72,11 @@ class SpringText extends StatelessWidget {
 
             Widget child;
             if (textBuilder != null) {
-              child = textBuilder!(segments[index], style);
+              child = textBuilder!(segments[index], styles[index]);
             } else {
               child = ParagraphText(
                 segments[index],
-                style: style,
+                style: styles[index],
               );
             }
 

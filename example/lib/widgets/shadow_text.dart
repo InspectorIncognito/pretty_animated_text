@@ -28,19 +28,19 @@ class ShadowText extends StatelessWidget {
     final shadowStrokeTextStyle = !hasShadow
         ? null
         : text.style!.copyWith(
-      foreground: Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = outlineWidth * 2
-        ..color = solidShadowColor!,
-    );
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = outlineWidth * 2
+              ..color = solidShadowColor!,
+          );
     final shadowFillTextStyle = !hasShadow
         ? null
         : text.style!.copyWith(
-      foreground: Paint()
-        ..style = PaintingStyle.fill
-        ..strokeWidth = outlineWidth * 2
-        ..color = solidShadowColor!,
-    );
+            foreground: Paint()
+              ..style = PaintingStyle.fill
+              ..strokeWidth = outlineWidth * 2
+              ..color = solidShadowColor!,
+          );
     return Stack(
       fit: StackFit.passthrough,
       clipBehavior: Clip.none,

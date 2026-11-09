@@ -120,24 +120,33 @@ TextStyle dsText({
     );
 
 // Named styles (letterSpacing converted from em → logical px at each size).
-TextStyle dsH1({Color color = dsInk}) =>
-    dsText(size: 44, weight: FontWeight.w600, color: color, letterSpacing: -1.4, height: 1.08);
-TextStyle dsDisplay({Color color = dsInk}) =>
-    dsText(size: 32, weight: FontWeight.w600, color: color, letterSpacing: -0.9);
-TextStyle dsH2({Color color = dsInk}) =>
-    dsText(size: 24, weight: FontWeight.w600, color: color, letterSpacing: -0.48);
-TextStyle dsHeading({Color color = dsInk}) =>
-    dsText(size: 20, weight: FontWeight.w600, color: color, letterSpacing: -0.36);
-TextStyle dsBody({Color color = dsInk}) => dsText(size: 15, color: color, height: 1.5);
+TextStyle dsH1({Color color = dsInk}) => dsText(
+    size: 44,
+    weight: FontWeight.w600,
+    color: color,
+    letterSpacing: -1.4,
+    height: 1.08);
+TextStyle dsDisplay({Color color = dsInk}) => dsText(
+    size: 32, weight: FontWeight.w600, color: color, letterSpacing: -0.9);
+TextStyle dsH2({Color color = dsInk}) => dsText(
+    size: 24, weight: FontWeight.w600, color: color, letterSpacing: -0.48);
+TextStyle dsHeading({Color color = dsInk}) => dsText(
+    size: 20, weight: FontWeight.w600, color: color, letterSpacing: -0.36);
+TextStyle dsBody({Color color = dsInk}) =>
+    dsText(size: 15, color: color, height: 1.5);
 TextStyle dsCaption({Color color = dsText2}) => dsText(size: 13, color: color);
 TextStyle dsLabel({Color color = dsInk}) =>
     dsText(size: 13, weight: FontWeight.w500, color: color);
-TextStyle dsSmall({Color color = dsText2, FontWeight weight = FontWeight.w500}) =>
+TextStyle dsSmall(
+        {Color color = dsText2, FontWeight weight = FontWeight.w500}) =>
     dsText(size: 12, weight: weight, color: color);
-TextStyle dsEyebrow({Color color = dsMuted}) =>
-    dsText(size: 11, weight: FontWeight.w600, color: color, letterSpacing: 0.88);
+TextStyle dsEyebrow({Color color = dsMuted}) => dsText(
+    size: 11, weight: FontWeight.w600, color: color, letterSpacing: 0.88);
 
-TextStyle dsMono({double size = 11, Color color = dsText2, FontWeight weight = FontWeight.w400}) =>
+TextStyle dsMono(
+        {double size = 11,
+        Color color = dsText2,
+        FontWeight weight = FontWeight.w400}) =>
     GoogleFonts.jetBrainsMono(fontSize: size, color: color, fontWeight: weight);
 
 // ── Semantic status (for the status pill) ──────────────────────────────────
@@ -169,12 +178,7 @@ DsStatusStyle dsStatus(DsStatusKind kind) {
         dot: Color(0xFFD69A2B)
       );
     case DsStatusKind.stopped:
-      return const (
-        fg: dsText2,
-        bg: dsSubtle,
-        border: dsBorder,
-        dot: dsMuted
-      );
+      return const (fg: dsText2, bg: dsSubtle, border: dsBorder, dot: dsMuted);
   }
 }
 

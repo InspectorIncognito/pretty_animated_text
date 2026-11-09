@@ -57,10 +57,7 @@ class SquashBounceStyle {
 /// Auto-plays on mount; honors repeat/reverse/pause from [AnimationConfig].
 class SquashBounceText extends StatefulWidget {
   /// The text to animate
-  final String text;
-
-  /// The style to apply to the text
-  final TextStyle? style;
+  final Text text;
 
   /// The text alignment
   final TextAlign textAlign;
@@ -77,7 +74,6 @@ class SquashBounceText extends StatefulWidget {
   const SquashBounceText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.squashStyle = const SquashBounceStyle(),
@@ -104,26 +100,16 @@ class _SquashBounceTextState extends State<SquashBounceText> {
 
   @override
   Widget build(BuildContext context) {
-    // Measure a glyph height once to turn [dropFraction] into pixels.
-    final painter = TextPainter(
-      text: TextSpan(text: 'M', style: widget.style),
-      textDirection: Directionality.maybeOf(context) ?? TextDirection.ltr,
-      textScaler: MediaQuery.maybeTextScalerOf(context) ?? TextScaler.noScaling,
-    )..layout();
-    final glyphHeight =
-        painter.height > 0 ? painter.height : (widget.style?.fontSize ?? 16.0);
-
     final squashStyle = widget.squashStyle;
     final spread = squashStyle.waveSpread.clamp(0.0, 0.95);
     final window = 1.0 - spread; // each glyph's own animation window
 
     return AnimatedTextBase(
       text: widget.text,
-      style: widget.style,
       textAlign: widget.textAlign,
       config: widget.config,
       onControllerCreated: _handleController,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         final p = _ctrl?.progress ?? 0.0;
         final n = segments.length;
 
@@ -131,6 +117,18 @@ class _SquashBounceTextState extends State<SquashBounceText> {
           crossAxisAlignment: WrapCrossAlignment.end,
           alignment: _wrapAlignment,
           children: List.generate(n, (index) {
+            // Measure a glyph height once to turn [dropFraction] into pixels.
+            final painter = TextPainter(
+              text: TextSpan(text: 'M', style: styles[index]),
+              textDirection:
+                  Directionality.maybeOf(context) ?? TextDirection.ltr,
+              textScaler:
+                  MediaQuery.maybeTextScalerOf(context) ?? TextScaler.noScaling,
+            )..layout();
+            final glyphHeight = painter.height > 0
+                ? painter.height
+                : (styles[index]?.fontSize ?? 16.0);
+
             // Stagger starts across [0, spread]; each runs its cycle over [start, start + window].
             final start = n <= 1 ? 0.0 : spread * (index / (n - 1));
             final localT = window <= 0.0
@@ -149,7 +147,7 @@ class _SquashBounceTextState extends State<SquashBounceText> {
                   transform: Matrix4.diagonal3Values(1, pose.scaleY, 1),
                   child: ParagraphText(
                     segments[index],
-                    style: widget.style,
+                    style: styles[index],
                   ),
                 ),
               ),

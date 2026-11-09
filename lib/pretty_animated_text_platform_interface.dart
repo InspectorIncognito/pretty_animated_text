@@ -8,7 +8,8 @@ abstract class PrettyAnimatedTextPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static PrettyAnimatedTextPlatform _instance = MethodChannelPrettyAnimatedText();
+  static PrettyAnimatedTextPlatform _instance =
+      MethodChannelPrettyAnimatedText();
 
   /// The default instance of [PrettyAnimatedTextPlatform] to use.
   ///

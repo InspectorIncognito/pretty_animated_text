@@ -102,8 +102,7 @@ class _SegmentState extends State<_Segment> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (item.icon != null)
-                Icon(item.icon, size: 15, color: fg),
+              if (item.icon != null) Icon(item.icon, size: 15, color: fg),
               if (item.icon != null && hasLabel) const SizedBox(width: 6),
               if (hasLabel)
                 Text(

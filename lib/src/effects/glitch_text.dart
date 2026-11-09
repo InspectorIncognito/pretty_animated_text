@@ -76,10 +76,7 @@ const List<List<Offset>> _kFringePatterns = [
 /// [AnimationConfig.repeat] is enabled.
 class GlitchText extends StatefulWidget {
   /// The text to animate.
-  final String text;
-
-  /// The style to apply to the text.
-  final TextStyle? style;
+  final Text text;
 
   /// The text alignment.
   final TextAlign textAlign;
@@ -96,7 +93,6 @@ class GlitchText extends StatefulWidget {
   const GlitchText({
     super.key,
     required this.text,
-    this.style,
     this.textAlign = TextAlign.start,
     required this.config,
     this.glitchStyle = const GlitchStyle(),
@@ -208,11 +204,10 @@ class _GlitchTextState extends State<GlitchText> {
   Widget build(BuildContext context) {
     return AnimatedTextBase(
       text: widget.text,
-      style: widget.style,
       textAlign: widget.textAlign,
       config: widget.config,
       onControllerCreated: _handleController,
-      builder: (context, animations, segments) {
+      builder: (context, animations, segments, styles) {
         final p = _ctrl?.progress ?? 0.0;
         final active = _activeProgress(segments, p);
 
@@ -220,11 +215,11 @@ class _GlitchTextState extends State<GlitchText> {
           alignment: _wrapAlignment,
           children: List.generate(segments.length, (index) {
             final g = active[index];
-            if (g == null) return Text(segments[index], style: widget.style);
+            if (g == null) return Text(segments[index], style: styles[index]);
             return _GlitchSlices(
               key: ValueKey('glitchActive_$index'),
               text: segments[index],
-              style: widget.style,
+              style: styles[index],
               glitchStyle: widget.glitchStyle,
               progress: g,
               salt: index,
