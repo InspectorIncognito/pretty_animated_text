@@ -85,12 +85,28 @@ class SpringDemo extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => SpringText(
-        text: Text(demoText, style: demoTextStyleOf(context)),
-        textAlign: textAlign,
-        config: _buildConfig(runtimeType, type, duration, onControllerCreated),
-        onControllerCreated: onControllerCreated,
-      );
+  Widget build(BuildContext context) {
+    final text = Text.rich(
+      const TextSpan(
+        text: "243",
+        children: [
+          TextSpan(
+            text: " KG de CO2",
+            style: TextStyle(color: Colors.red, fontSize: 24),
+          ),
+        ],
+      ),
+      style:
+          demoTextStyleOf(context).copyWith(color: Colors.black, fontSize: 64),
+    );
+
+    return SpringText(
+      text: text,
+      textAlign: textAlign,
+      config: _buildConfig(runtimeType, type, duration, onControllerCreated),
+      onControllerCreated: onControllerCreated,
+    );
+  }
 }
 
 class ScaleTextDemo extends StatelessWidget {

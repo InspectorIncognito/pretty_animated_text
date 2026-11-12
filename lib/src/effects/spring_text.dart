@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pretty_animated_text/src/utils/baseline_mixin.dart';
 import 'package:pretty_animated_text/src/utils/text_widget_builder.dart';
-import 'package:pretty_animated_text/src/widgets/paragraph_text.dart';
 import 'package:pretty_animated_text/src/animated_text_base.dart';
 import 'package:pretty_animated_text/src/animated_text_controller.dart';
 import 'package:pretty_animated_text/src/animation_config.dart';
 import 'package:pretty_animated_text/src/utils/spring_curve.dart';
 
 /// A widget that animates text with a spring effect
-class SpringText extends StatelessWidget {
+class SpringText extends StatelessWidget with BaselineMixin {
   /// The text to animate
   final Text text;
 
@@ -42,6 +42,7 @@ class SpringText extends StatelessWidget {
       // glyphs rebuild.
       rebuildOnTick: false,
       builder: (context, animations, segments, styles) {
+        final baseline = getLargestBaseline(styles);
         return Wrap(
           alignment: textAlign == TextAlign.center
               ? WrapAlignment.center
@@ -74,24 +75,28 @@ class SpringText extends StatelessWidget {
             if (textBuilder != null) {
               child = textBuilder!(segments[index], styles[index]);
             } else {
-              child = ParagraphText(
+              child = Text(
                 segments[index],
                 style: styles[index],
               );
             }
 
-            return AnimatedBuilder(
-              animation: animations[index],
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0.0, yAnimation.value),
-                  child: Opacity(
-                    opacity: opacityAnimation.value.clamp(0.0, 1.0),
-                    child: child,
-                  ),
-                );
-              },
-              child: child,
+            return Baseline(
+              baseline: baseline,
+              baselineType: TextBaseline.alphabetic,
+              child: AnimatedBuilder(
+                animation: animations[index],
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0.0, yAnimation.value),
+                    child: Opacity(
+                      opacity: opacityAnimation.value.clamp(0.0, 1.0),
+                      child: child,
+                    ),
+                  );
+                },
+                child: child,
+              ),
             );
           }),
         );
